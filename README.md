@@ -77,10 +77,10 @@ Project Details & Content Management
 
 Scripts
 
-- `npm run dev` — Runs the Next.js development server.
-- `npm run build` — Builds the app for production.
-- `npm run start` — Starts the production server after build.
-- `npm run lint` — Runs ESLint.
+- `npm run dev` Runs the Next.js development server.
+- `npm run build` Builds the app for production.
+- `npm run start` Starts the production server after build.
+- `npm run lint` Runs ESLint.
 
 Build & Deployment
 
@@ -98,9 +98,9 @@ npm run start
 
 Configuration Files
 
-- `next.config.ts` — Next.js configuration
-- `tsconfig.json` — TypeScript compiler settings
-- `tailwind.config.mjs` / `postcss.config.mjs` — Tailwind + PostCSS (tailwind is a devDependency)
+- `next.config.ts` Next.js configuration
+- `tsconfig.json` TypeScript compiler settings
+- `tailwind.config.mjs` / `postcss.config.mjs` Tailwind + PostCSS (tailwind is a devDependency)
 
 Notes on SEO & Accessibility
 
