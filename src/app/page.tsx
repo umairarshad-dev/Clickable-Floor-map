@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import ShopModal from '@/components/ShopModal';
 import { Shop } from '../components/types';
+import { Building2, Users, DollarSign, TrendingUp, Clock, AlertCircle, Percent, MapPin } from 'lucide-react';
 
 const SHOPS: Shop[] = [
 	{
@@ -491,41 +492,122 @@ export default function Home() {
 					Clickable Floor map
 				</h1>
 
-				{/* Stats Card */}
-				<div className="flex flex-row flex-wrap gap-4 my-6">
-					<div className="flex-1 min-w-[180px] bg-white rounded-lg shadow p-4 border border-gray-200">
-						<h3 className="text-sm font-medium text-gray-500">Total Shops</h3>
-						<p className="text-xl font-bold text-gray-800">{SHOPS.length}</p>
+				{/* Stats Cards */}
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 my-8">
+					<div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+						<div className="flex items-center justify-between">
+							<div>
+								<p className="text-sm text-gray-500 mb-1">Total Shops</p>
+								<p className="text-3xl font-bold text-gray-800">{SHOPS.length}</p>
+							</div>
+							<div className="bg-blue-100 p-3 rounded-full">
+								<Building2 className="w-6 h-6 text-blue-600" />
+							</div>
+						</div>
 					</div>
-					<div className="flex-1 min-w-[180px] bg-white rounded-lg shadow p-4 border border-gray-200">
-						<h3 className="text-sm font-medium text-gray-500">
-							Rented (Paid)
-						</h3>
-						<p className="text-xl font-bold text-green-500">
-							{
-								SHOPS.filter(
-									(s) => s.status === 'rented' && s.rentStatus === 'paid'
-								).length
-							}
-						</p>
+
+					<div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+						<div className="flex items-center justify-between">
+							<div>
+								<p className="text-sm text-gray-500 mb-1">Rented (Paid)</p>
+								<p className="text-3xl font-bold text-green-600">
+									{SHOPS.filter((s) => s.status === 'rented' && s.rentStatus === 'paid').length}
+								</p>
+							</div>
+							<div className="bg-green-100 p-3 rounded-full">
+								<DollarSign className="w-6 h-6 text-green-600" />
+							</div>
+						</div>
 					</div>
-					<div className="flex-1 min-w-[180px] bg-white rounded-lg shadow p-4 border border-gray-200">
-						<h3 className="text-sm font-medium text-gray-500">
-							Rented (Unpaid)
-						</h3>
-						<p className="text-xl font-bold text-red-500">
-							{
-								SHOPS.filter(
-									(s) => s.status === 'rented' && s.rentStatus === 'unpaid'
-								).length
-							}
-						</p>
+
+					<div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500 hover:shadow-lg transition-shadow">
+						<div className="flex items-center justify-between">
+							<div>
+								<p className="text-sm text-gray-500 mb-1">Rented (Unpaid)</p>
+								<p className="text-3xl font-bold text-red-600">
+									{SHOPS.filter((s) => s.status === 'rented' && s.rentStatus === 'unpaid').length}
+								</p>
+							</div>
+							<div className="bg-red-100 p-3 rounded-full">
+								<AlertCircle className="w-6 h-6 text-red-600" />
+							</div>
+						</div>
 					</div>
-					<div className="flex-1 min-w-[180px] bg-white rounded-lg shadow p-4 border border-gray-200">
-						<h3 className="text-sm font-medium text-gray-500">Vacant</h3>
-						<p className="text-xl font-bold text-yellow-600">
-							{SHOPS.filter((s) => s.status === 'vacant').length}
-						</p>
+
+					<div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500 hover:shadow-lg transition-shadow">
+						<div className="flex items-center justify-between">
+							<div>
+								<p className="text-sm text-gray-500 mb-1">Vacant</p>
+								<p className="text-3xl font-bold text-yellow-600">
+									{SHOPS.filter((s) => s.status === 'vacant').length}
+								</p>
+							</div>
+							<div className="bg-yellow-100 p-3 rounded-full">
+								<MapPin className="w-6 h-6 text-yellow-600" />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{/* Rent Overview Section */}
+				<div className="mb-8">
+					<h2 className="text-xl font-semibold text-gray-800 mb-4">Rent Overview</h2>
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+						<div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-500 mb-1">Current Month</p>
+									<p className="text-3xl font-bold text-gray-800">
+										{new Date().toLocaleString('default', { month: 'short' })}
+									</p>
+								</div>
+								<div className="bg-purple-100 p-3 rounded-full">
+									<Clock className="w-6 h-6 text-purple-600" />
+								</div>
+							</div>
+						</div>
+
+						<div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-500 mb-1">Collected</p>
+									<p className="text-3xl font-bold text-green-600">
+										{SHOPS.filter((s) => s.status === 'rented' && s.rentStatus === 'paid').length}
+									</p>
+								</div>
+								<div className="bg-green-100 p-3 rounded-full">
+									<TrendingUp className="w-6 h-6 text-green-600" />
+								</div>
+							</div>
+						</div>
+
+						<div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500 hover:shadow-lg transition-shadow">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-500 mb-1">Pending</p>
+									<p className="text-3xl font-bold text-orange-600">
+										{SHOPS.filter((s) => s.status === 'rented' && s.rentStatus === 'unpaid').length}
+									</p>
+								</div>
+								<div className="bg-orange-100 p-3 rounded-full">
+									<Users className="w-6 h-6 text-orange-600" />
+								</div>
+							</div>
+						</div>
+
+						<div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-indigo-500 hover:shadow-lg transition-shadow">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-500 mb-1">Collection Rate</p>
+									<p className="text-3xl font-bold text-indigo-600">
+										{Math.round((SHOPS.filter((s) => s.status === 'rented' && s.rentStatus === 'paid').length / SHOPS.filter((s) => s.status === 'rented').length) * 100) || 0}%
+									</p>
+								</div>
+								<div className="bg-indigo-100 p-3 rounded-full">
+									<Percent className="w-6 h-6 text-indigo-600" />
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 
