@@ -380,134 +380,161 @@ export default function Home() {
 				</div>
 
 				{/* Filtered Shops List */}
-				{currentShops.length > 0 && (
-					<div className="mt-8 bg-white rounded-lg shadow-md p-6">
-						<div className="flex justify-between items-center mb-4">
-							<h2 className="text-xl font-semibold text-gray-800">
-								{searchTerm || selectedCategory !== 'all' || selectedStatus !== 'all' 
-									? 'Filtered Shops' 
-									: 'All Shops'}
-							</h2>
+				<div className="mt-8 bg-white rounded-lg shadow-md p-6">
+					<div className="flex justify-between items-center mb-4">
+						<h2 className="text-xl font-semibold text-gray-800">
+							{searchTerm || selectedCategory !== 'all' || selectedStatus !== 'all' 
+								? 'Filtered Shops' 
+								: 'All Shops'}
+						</h2>
+						{filteredShops.length > 0 && (
 							<div className="text-sm text-gray-600">
 								Showing {indexOfFirstShop + 1}-{Math.min(indexOfLastShop, filteredShops.length)} of {filteredShops.length} shops
 							</div>
-						</div>
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-							{currentShops.map((shop) => (
-								<div
-									key={shop.id}
-									className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer hover:border-blue-300"
-									onClick={() => handleShopClick(shop)}
-									onMouseEnter={() => handleShopHover(shop.id)}
-									onMouseLeave={() => handleShopHover(null)}
-								>
-									<div className="flex justify-between items-start mb-2">
-										<h3 className="font-semibold text-gray-800">{shop.name}</h3>
-										<span className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(shop.category)}`}>
-											{shop.category}
-										</span>
-									</div>
-									<div className="text-sm text-gray-600 space-y-1">
-										<div className="flex justify-between">
-											<span>Size:</span>
-											<span>{shop.size}</span>
-										</div>
-										<div className="flex justify-between">
-											<span>Status:</span>
-											<span className={`font-medium ${
-												shop.status === 'rented' ? 'text-green-600' : 'text-yellow-600'
-											}`}>
-												{shop.status.charAt(0).toUpperCase() + shop.status.slice(1)}
-											</span>
-										</div>
-										{shop.contact?.phone && (
-											<div className="flex justify-between">
-												<span>Phone:</span>
-												<span className="text-xs">{shop.contact.phone}</span>
-											</div>
-										)}
-										{shop.hours && (
-											<div className="flex justify-between">
-												<span>Hours:</span>
-												<span className="text-xs">{shop.hours.opening} - {shop.hours.closing}</span>
-											</div>
-										)}
-									</div>
-								</div>
-							))}
-						</div>
-
-						{/* Pagination */}
-						{totalPages > 1 && (
-							<div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-								<div className="text-sm text-gray-600">
-									Page {currentPage} of {totalPages}
-								</div>
-								<div className="flex items-center gap-2">
-									<button
-										onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-										disabled={currentPage === 1}
-										className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-											currentPage === 1
-												? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-												: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-										}`}
-									>
-										Previous
-									</button>
-									
-									<div className="flex items-center gap-1">
-										{[...Array(totalPages)].map((_, index) => {
-											const pageNumber = index + 1;
-											// Show max 5 page numbers with ellipsis for more pages
-											if (
-												pageNumber === 1 || 
-												pageNumber === totalPages ||
-												(pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
-											) {
-												return (
-													<button
-														key={pageNumber}
-														onClick={() => setCurrentPage(pageNumber)}
-														className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-															currentPage === pageNumber
-																? 'bg-blue-600 text-white'
-																: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-														}`}
-													>
-														{pageNumber}
-													</button>
-												);
-											} else if (
-												pageNumber === currentPage - 2 || 
-												pageNumber === currentPage + 2
-											) {
-												return (
-													<span key={pageNumber} className="px-2 text-gray-400">
-														...
-													</span>
-												);
-											}
-											return null;
-										})}
-									</div>
-									
-									<button
-										onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-										disabled={currentPage === totalPages}
-										className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-											currentPage === totalPages
-												? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-												: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-										}`}
-									>
-										Next
-									</button>
-								</div>
-							</div>
 						)}
 					</div>
-				)}
+					
+					{currentShops.length > 0 ? (
+						<>
+							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+								{currentShops.map((shop) => (
+									<div
+										key={shop.id}
+										className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer hover:border-blue-300"
+										onClick={() => handleShopClick(shop)}
+										onMouseEnter={() => handleShopHover(shop.id)}
+										onMouseLeave={() => handleShopHover(null)}
+									>
+										<div className="flex justify-between items-start mb-2">
+											<h3 className="font-semibold text-gray-800">{shop.name}</h3>
+											<span className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(shop.category)}`}>
+												{shop.category}
+											</span>
+										</div>
+										<div className="text-sm text-gray-600 space-y-1">
+											<div className="flex justify-between">
+												<span>Size:</span>
+												<span>{shop.size}</span>
+											</div>
+											<div className="flex justify-between">
+												<span>Status:</span>
+												<span className={`font-medium ${
+													shop.status === 'rented' ? 'text-green-600' : 'text-yellow-600'
+												}`}>
+													{shop.status.charAt(0).toUpperCase() + shop.status.slice(1)}
+												</span>
+											</div>
+											{shop.contact?.phone && (
+												<div className="flex justify-between">
+													<span>Phone:</span>
+													<span className="text-xs">{shop.contact.phone}</span>
+												</div>
+											)}
+											{shop.hours && (
+												<div className="flex justify-between">
+													<span>Hours:</span>
+													<span className="text-xs">{shop.hours.opening} - {shop.hours.closing}</span>
+												</div>
+											)}
+										</div>
+									</div>
+								))}
+							</div>
+
+							{/* Pagination */}
+							{totalPages > 1 && (
+								<div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+									<div className="text-sm text-gray-600">
+										Page {currentPage} of {totalPages}
+									</div>
+									<div className="flex items-center gap-2">
+										<button
+											onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+											disabled={currentPage === 1}
+											className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+												currentPage === 1
+													? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+													: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+											}`}
+										>
+											Previous
+										</button>
+										
+										<div className="flex items-center gap-1">
+											{[...Array(totalPages)].map((_, index) => {
+												const pageNumber = index + 1;
+												// Show max 5 page numbers with ellipsis for more pages
+												if (
+													pageNumber === 1 || 
+													pageNumber === totalPages ||
+													(pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
+												) {
+													return (
+														<button
+															key={pageNumber}
+															onClick={() => setCurrentPage(pageNumber)}
+															className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+																currentPage === pageNumber
+																	? 'bg-blue-600 text-white'
+																	: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+															}`}
+														>
+															{pageNumber}
+														</button>
+													);
+												} else if (
+													pageNumber === currentPage - 2 || 
+													pageNumber === currentPage + 2
+												) {
+													return (
+														<span key={pageNumber} className="px-2 text-gray-400">
+															...
+														</span>
+													);
+												}
+												return null;
+											})}
+										</div>
+										
+										<button
+											onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+											disabled={currentPage === totalPages}
+											className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+												currentPage === totalPages
+													? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+													: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+											}`}
+										>
+											Next
+										</button>
+									</div>
+								</div>
+							)}
+						</>
+					) : (
+						<div className="text-center py-12">
+							<div className="text-gray-400 mb-4">
+								<svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+							</div>
+							<h3 className="text-lg font-medium text-gray-900 mb-2">No shops found</h3>
+							<p className="text-gray-600 mb-4">
+								{searchTerm || selectedCategory !== 'all' || selectedStatus !== 'all' 
+									? 'Try adjusting your search or filters to find what you are looking for.'
+									: 'No shops are available at the moment.'}
+							</p>
+							{(searchTerm || selectedCategory !== 'all' || selectedStatus !== 'all') && (
+								<button
+									onClick={clearFilters}
+									className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+								>
+									Clear Filters
+								</button>
+							)}
+						</div>
+					)}
+				</div>
 			</div>
 
 			{isModalOpen && selectedShop && (
