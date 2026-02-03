@@ -20,6 +20,8 @@ export default function Home() {
 	const [selectedStatus, setSelectedStatus] = useState<string>('all');
 	const [highlightedShopId, setHighlightedShopId] = useState<string | null>(null);
 	const [selectedFloor, setSelectedFloor] = useState<string>(FLOORS[0].id);
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const shopsPerPage = 10;
 
 	// Filter shops based on search, filters, and floor
 	const filteredShops = SHOPS.filter(shop => {
@@ -29,6 +31,17 @@ export default function Home() {
 		const matchesFloor = !shop.floorId || shop.floorId === selectedFloor;
 		return matchesSearch && matchesCategory && matchesStatus && matchesFloor;
 	});
+
+	// Pagination calculations
+	const totalPages = Math.ceil(filteredShops.length / shopsPerPage);
+	const indexOfLastShop = currentPage * shopsPerPage;
+	const indexOfFirstShop = indexOfLastShop - shopsPerPage;
+	const currentShops = filteredShops.slice(indexOfFirstShop, indexOfLastShop);
+
+	// Reset to page 1 when filters change
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [searchTerm, selectedCategory, selectedStatus, selectedFloor]);
 
 	const currentFloor = FLOORS.find(floor => floor.id === selectedFloor) || FLOORS[0];
 
@@ -367,15 +380,20 @@ export default function Home() {
 				</div>
 
 				{/* Filtered Shops List */}
-				{filteredShops.length > 0 && (
+				{currentShops.length > 0 && (
 					<div className="mt-8 bg-white rounded-lg shadow-md p-6">
-						<h2 className="text-xl font-semibold text-gray-800 mb-4">
-							{searchTerm || selectedCategory !== 'all' || selectedStatus !== 'all' 
-								? 'Filtered Shops' 
-								: 'All Shops'}
-						</h2>
+						<div className="flex justify-between items-center mb-4">
+							<h2 className="text-xl font-semibold text-gray-800">
+								{searchTerm || selectedCategory !== 'all' || selectedStatus !== 'all' 
+									? 'Filtered Shops' 
+									: 'All Shops'}
+							</h2>
+							<div className="text-sm text-gray-600">
+								Showing {indexOfFirstShop + 1}-{Math.min(indexOfLastShop, filteredShops.length)} of {filteredShops.length} shops
+							</div>
+						</div>
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-							{filteredShops.map((shop) => (
+							{currentShops.map((shop) => (
 								<div
 									key={shop.id}
 									className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer hover:border-blue-300"
@@ -418,6 +436,76 @@ export default function Home() {
 								</div>
 							))}
 						</div>
+
+						{/* Pagination */}
+						{totalPages > 1 && (
+							<div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+								<div className="text-sm text-gray-600">
+									Page {currentPage} of {totalPages}
+								</div>
+								<div className="flex items-center gap-2">
+									<button
+										onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+										disabled={currentPage === 1}
+										className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+											currentPage === 1
+												? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+												: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+										}`}
+									>
+										Previous
+									</button>
+									
+									<div className="flex items-center gap-1">
+										{[...Array(totalPages)].map((_, index) => {
+											const pageNumber = index + 1;
+											// Show max 5 page numbers with ellipsis for more pages
+											if (
+												pageNumber === 1 || 
+												pageNumber === totalPages ||
+												(pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
+											) {
+												return (
+													<button
+														key={pageNumber}
+														onClick={() => setCurrentPage(pageNumber)}
+														className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+															currentPage === pageNumber
+																? 'bg-blue-600 text-white'
+																: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+														}`}
+													>
+														{pageNumber}
+													</button>
+												);
+											} else if (
+												pageNumber === currentPage - 2 || 
+												pageNumber === currentPage + 2
+											) {
+												return (
+													<span key={pageNumber} className="px-2 text-gray-400">
+														...
+													</span>
+												);
+											}
+											return null;
+										})}
+									</div>
+									
+									<button
+										onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+										disabled={currentPage === totalPages}
+										className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+											currentPage === totalPages
+												? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+												: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+										}`}
+									>
+										Next
+									</button>
+								</div>
+							</div>
+						)}
 					</div>
 				)}
 			</div>
