@@ -14,7 +14,7 @@ export default function ShopModal({ shop, onClose }: ShopModalProps) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
       <div 
-        className="absolute inset-0 bg-black bg-opacity-50"
+        className="absolute inset-0 bg-gray-900 bg-opacity-30 backdrop-blur-sm"
         onClick={onClose}
       ></div>
       
