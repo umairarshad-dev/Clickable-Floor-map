@@ -3,460 +3,34 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import ShopModal from '@/components/ShopModal';
-import { Shop } from '../components/types';
-import { Building2, Users, DollarSign, AlertCircle, MapPin } from 'lucide-react';
+import { Shop, Floor } from '../components/types';
+import { Building2, Users, DollarSign, AlertCircle, MapPin, Search, Filter, X, Layers } from 'lucide-react';
+import shopsData from '../data/shops.json';
+import floorsData from '../data/floors.json';
 
-const SHOPS: Shop[] = [
-	{
-		id: '1',
-		name: 'Alkaram Studio',
-		size: '1000 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 35, y: 178 },
-			{ x: 142, y: 178 },
-			{ x: 142, y: 415 },
-			{ x: 35, y: 415 },
-		],
-	},
-	{
-		id: '2',
-		name: 'Mantra',
-		size: '800 sq ft',
-		status: 'vacant',
-		rentStatus: 'n/a',
-		polygon: [
-			{ x: 142, y: 294 },
-			{ x: 185, y: 294 },
-			{ x: 185, y: 349 },
-			{ x: 142, y: 349 },
-		],
-	},
-	{
-		id: '3',
-		name: 'Limelight',
-		size: '900 sq ft',
-		status: 'rented',
-		rentStatus: 'unpaid',
-		polygon: [
-			{ x: 996, y: 282 },
-			{ x: 1174, y: 282 },
-			{ x: 1172, y: 355 },
-			{ x: 996, y: 356 },
-		],
-	},
-	{
-		id: ' 4',
-		name: 'Ree Bok',
-		size: '700 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 278, y: 510 },
-			{ x: 352, y: 510 },
-			{ x: 352, y: 586 },
-			{ x: 278, y: 586 },
-		],
-	},
-	{
-		id: '5',
-		name: 'Beaute Collection',
-		size: '700 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 226, y: 510 },
-			{ x: 276, y: 510 },
-			{ x: 276, y: 586 },
-			{ x: 226, y: 586 },
-		],
-	},
-	{
-		id: '6',
-		name: '1st Step',
-		size: '760 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 354, y: 510 },
-			{ x: 430, y: 510 },
-			{ x: 430, y: 584 },
-			{ x: 354, y: 584 },
-		],
-	},
-	{
-		id: '7',
-		name: 'Nike',
-		size: '850 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 429, y: 510 },
-			{ x: 479, y: 510 },
-			{ x: 479, y: 586 },
-			{ x: 429, y: 586 },
-		],
-	},
-	{
-		id: '8',
-		name: 'Puma',
-		size: '500 sq ft',
-		status: 'vacant',
-		rentStatus: 'n/a',
-		polygon: [
-			{ x: 596, y: 510 },
-			{ x: 634, y: 510 },
-			{ x: 634, y: 586 },
-			{ x: 596, y: 586 },
-		],
-	},
-	{
-		id: '9',
-		name: 'Borjan',
-		size: '1500 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 634, y: 510 },
-			{ x: 708, y: 510 },
-			{ x: 708, y: 586 },
-			{ x: 634, y: 586 },
-		],
-	},
-	{
-		id: '10',
-		name: 'U & Polo',
-		size: '1500 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 710, y: 510 },
-			{ x: 760, y: 510 },
-			{ x: 760, y: 586 },
-			{ x: 710, y: 586 },
-		],
-	},
-	{
-		id: '11',
-		name: 'Stylo',
-		size: '1500 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 760, y: 510 },
-			{ x: 844, y: 510 },
-			{ x: 844, y: 586 },
-			{ x: 760, y: 586 },
-		],
-	},
-	{
-		id: '12',
-		name: 'Insignia shoes',
-		size: '1500 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 846, y: 510 },
-			{ x: 927, y: 510 },
-			{ x: 927, y: 586 },
-			{ x: 846, y: 586 },
-		],
-	},
-	{
-		id: '13',
-		name: 'Revolution',
-		size: '1500 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 926, y: 510 },
-			{ x: 1000, y: 510 },
-			{ x: 1000, y: 586 },
-			{ x: 926, y: 586 },
-		],
-	},
-	{
-		id: '14',
-		name: 'Hush Puppies',
-		size: '900 sq ft',
-		status: 'rented',
-		rentStatus: 'unpaid',
-		polygon: [
-			{ x: 438, y: 410 },
-			{ x: 500, y: 410 },
-			{ x: 500, y: 470 },
-			{ x: 438, y: 470 },
-		],
-	},
-	{
-		id: '15',
-		name: 'Edenrode',
-		size: '900 sq ft',
-		status: 'vacant',
-		rentStatus: 'n/a',
-		polygon: [
-			{ x: 436, y: 356 },
-			{ x: 502, y: 356 },
-			{ x: 502, y: 410 },
-			{ x: 436, y: 410 },
-		],
-	},
-	{
-		id: '16',
-		name: 'Kids Master',
-		size: '900 sq ft',
-		status: 'rented',
-		rentStatus: 'unpaid',
-		polygon: [
-			{ x: 436, y: 292 },
-			{ x: 502, y: 292 },
-			{ x: 502, y: 356 },
-			{ x: 436, y: 356 },
-		],
-	},
-	{
-		id: '17',
-		name: 'Traditions',
-		size: '900 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 500, y: 292 },
-			{ x: 556, y: 292 },
-			{ x: 556, y: 356 },
-			{ x: 500, y: 356 },
-		],
-	},
-	{
-		id: '18',
-		name: 'Syra',
-		size: '900 sq ft',
-		status: 'rented',
-		rentStatus: 'n/a',
-		polygon: [
-			{ x: 556, y: 292 },
-			{ x: 590, y: 292 },
-			{ x: 590, y: 356 },
-			{ x: 556, y: 356 },
-		],
-	},
-	{
-		id: '19',
-		name: 'Cotton & SIK',
-		size: '900 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 590, y: 292 },
-			{ x: 630, y: 292 },
-			{ x: 630, y: 356 },
-			{ x: 590, y: 356 },
-		],
-	},
-	{
-		id: '20',
-		name: 'EGO',
-		size: '900 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 562, y: 410 },
-			{ x: 630, y: 410 },
-			{ x: 630, y: 356 },
-			{ x: 562, y: 356 },
-		],
-	},
-	{
-		id: '21',
-		name: 'charles tyrwhitt',
-		size: '950 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 600, y: 180 },
-			{ x: 662, y: 180 },
-			{ x: 662, y: 250 },
-			{ x: 600, y: 250 },
-		],
-	},
-	{
-		id: '22',
-		name: 'Hugo Boss',
-		size: '950 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 664, y: 180 },
-			{ x: 758, y: 180 },
-			{ x: 758, y: 252 },
-			{ x: 664, y: 252 },
-		],
-	},
-	{
-		id: '23',
-		name: 'Entertainment',
-		size: '950 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 758, y: 180 },
-			{ x: 916, y: 180 },
-			{ x: 916, y: 252 },
-			{ x: 758, y: 252 },
-		],
-	},
-	{
-		id: '24',
-		name: 'Minnie minors',
-		size: '950 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 916, y: 180 },
-			{ x: 1045, y: 180 },
-			{ x: 1045, y: 252 },
-			{ x: 916, y: 252 },
-		],
-	},
-	{
-		id: '25',
-		name: 'Sapphire',
-		size: '1100 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 1014, y: 180 },
-			{ x: 1174, y: 180 },
-			{ x: 1174, y: 282 },
-			{ x: 1014, y: 282 },
-		],
-	},
-
-	{
-		id: '26',
-		name: 'Meme',
-		size: '800 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 35, y: 416 },
-			{ x: 142, y: 416 },
-			{ x: 140, y: 584 },
-			{ x: 35, y: 584 },
-		],
-	},
-	{
-		id: '27',
-		name: 'Hang Ten',
-		size: '800 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 200, y: 385 },
-			{ x: 267, y: 385 },
-			{ x: 267, y: 470 },
-			{ x: 200, y: 470 },
-		],
-	},
-	{
-		id: '28',
-		name: "D' Man",
-		size: '800 sq ft',
-		status: 'vacant',
-		rentStatus: 'n/a',
-		polygon: [
-			{ x: 142, y: 414 },
-			{ x: 200, y: 414 },
-			{ x: 200, y: 470 },
-			{ x: 142, y: 470 },
-		],
-	},
-	{
-		id: '29',
-		name: 'Mango',
-		size: '850 sq ft',
-		status: 'vacant',
-		rentStatus: 'n/a',
-		polygon: [
-			{ x: 142, y: 178 },
-			{ x: 342, y: 178 },
-			{ x: 342, y: 252 },
-			{ x: 142, y: 252 },
-		],
-	},
-	{
-		id: '30',
-		name: 'Women secret',
-		size: '900 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 344, y: 180 },
-			{ x: 404, y: 180 },
-			{ x: 404, y: 250 },
-			{ x: 344, y: 250 },
-		],
-	},
-	{
-		id: '31',
-		name: 'Adidas',
-		size: '900 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 404, y: 180 },
-			{ x: 526, y: 180 },
-			{ x: 526, y: 250 },
-			{ x: 404, y: 250 },
-		],
-	},
-	{
-		id: '32',
-		name: 'Telenor Service Booth',
-		size: '900 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 526, y: 180 },
-			{ x: 600, y: 180 },
-			{ x: 600, y: 250 },
-			{ x: 526, y: 250 },
-		],
-	},
-	{
-		id: '33',
-		name: 'Bareeze',
-		size: '900 sq ft',
-		status: 'rented',
-		rentStatus: 'paid',
-		polygon: [
-			{ x: 1000, y: 357 },
-			{ x: 1171, y: 357 },
-			{ x: 1171, y: 442 },
-			{ x: 998, y: 442 },
-		],
-	},
-	{
-		id: '34',
-		name: 'Nishat Linen',
-		size: '500 sq ft',
-		status: 'vacant',
-		rentStatus: 'n/a',
-		polygon: [
-			{ x: 1000, y: 442 },
-			{ x: 1172, y: 442 },
-			{ x: 1172, y: 586 },
-			{ x: 1000, y: 586 },
-		],
-	},
-];
+const SHOPS: Shop[] = shopsData as Shop[];
+const FLOORS: Floor[] = floorsData as Floor[];
 
 export default function Home() {
 	const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const containerRef = useRef<HTMLDivElement>(null);
-	// const [scale, setScale] = useState(1);
+	const [searchTerm, setSearchTerm] = useState('');
+	const [selectedCategory, setSelectedCategory] = useState<string>('all');
+	const [selectedStatus, setSelectedStatus] = useState<string>('all');
+	const [highlightedShopId, setHighlightedShopId] = useState<string | null>(null);
+	const [selectedFloor, setSelectedFloor] = useState<string>(FLOORS[0].id);
+
+	// Filter shops based on search, filters, and floor
+	const filteredShops = SHOPS.filter(shop => {
+		const matchesSearch = shop.name.toLowerCase().includes(searchTerm.toLowerCase());
+		const matchesCategory = selectedCategory === 'all' || shop.category === selectedCategory;
+		const matchesStatus = selectedStatus === 'all' || shop.status === selectedStatus;
+		const matchesFloor = !shop.floorId || shop.floorId === selectedFloor;
+		return matchesSearch && matchesCategory && matchesStatus && matchesFloor;
+	});
+
+	const currentFloor = FLOORS.find(floor => floor.id === selectedFloor) || FLOORS[0];
 
 	const handleShopClick = (shop: Shop) => {
 		setSelectedShop(shop);
@@ -466,6 +40,29 @@ export default function Home() {
 	const closeModal = () => {
 		setIsModalOpen(false);
 		setSelectedShop(null);
+	};
+
+	const handleShopHover = (shopId: string | null) => {
+		setHighlightedShopId(shopId);
+	};
+
+	const clearFilters = () => {
+		setSearchTerm('');
+		setSelectedCategory('all');
+		setSelectedStatus('all');
+	};
+
+	const getCategoryColor = (category: string) => {
+		const colors = {
+			clothing: 'bg-purple-100 text-purple-800',
+			footwear: 'bg-blue-100 text-blue-800',
+			electronics: 'bg-gray-100 text-gray-800',
+			food: 'bg-orange-100 text-orange-800',
+			services: 'bg-green-100 text-green-800',
+			entertainment: 'bg-pink-100 text-pink-800',
+			other: 'bg-yellow-100 text-yellow-800'
+		};
+		return colors[category as keyof typeof colors] || colors.other;
 	};
 
 	useEffect(() => {
@@ -491,6 +88,98 @@ export default function Home() {
 				<h1 className="text-3xl font-bold text-gray-800 mb-6">
 					Clickable Floor map
 				</h1>
+
+				{/* Floor Switcher */}
+				<div className="bg-white rounded-lg shadow-md p-6 mb-6">
+					<div className="flex items-center justify-between mb-4">
+						<h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+							<Layers size={20} />
+							Select Floor
+						</h3>
+						<div className="text-sm text-gray-600">
+							{currentFloor.description}
+						</div>
+					</div>
+					<div className="flex gap-3 flex-wrap">
+						{FLOORS.map((floor) => (
+							<button
+								key={floor.id}
+								onClick={() => setSelectedFloor(floor.id)}
+								className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+									selectedFloor === floor.id
+										? 'bg-blue-600 text-white shadow-lg transform scale-105'
+										: 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md'
+								}`}
+							>
+								{floor.name}
+							</button>
+						))}
+					</div>
+				</div>
+
+				{/* Search and Filter Section */}
+				<div className="bg-white rounded-lg shadow-md p-6 mb-6">
+					<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+						{/* Search */}
+						<div className="md:col-span-2">
+							<div className="relative">
+								<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+								<input
+									type="text"
+									placeholder="Search shops by name..."
+									value={searchTerm}
+									onChange={(e) => setSearchTerm(e.target.value)}
+									className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+								/>
+							</div>
+						</div>
+
+						{/* Category Filter */}
+						<div>
+							<select
+								value={selectedCategory}
+								onChange={(e) => setSelectedCategory(e.target.value)}
+								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+							>
+								<option value="all">All Categories</option>
+								<option value="clothing">Clothing</option>
+								<option value="footwear">Footwear</option>
+								<option value="electronics">Electronics</option>
+								<option value="food">Food</option>
+								<option value="services">Services</option>
+								<option value="entertainment">Entertainment</option>
+								<option value="other">Other</option>
+							</select>
+						</div>
+
+						{/* Status Filter */}
+						<div>
+							<select
+								value={selectedStatus}
+								onChange={(e) => setSelectedStatus(e.target.value)}
+								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+							>
+								<option value="all">All Status</option>
+								<option value="rented">Rented</option>
+								<option value="vacant">Vacant</option>
+							</select>
+						</div>
+					</div>
+
+					{/* Filter Results and Clear */}
+					<div className="flex justify-between items-center mt-4">
+						<div className="text-sm text-gray-600">
+							{filteredShops.length} of {SHOPS.length} shops found
+						</div>
+						<button
+							onClick={clearFilters}
+							className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
+						>
+							<X size={16} />
+							Clear Filters
+						</button>
+					</div>
+				</div>
 
 				{/* Stats Cards */}
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 my-8">
@@ -562,8 +251,8 @@ export default function Home() {
 					}}
 				>
 					<Image
-						src="/1st-Floor.png"
-						alt="Floor Plan"
+						src={currentFloor.image}
+						alt={`${currentFloor.name} Floor Plan`}
 						fill
 						className="object-contain"
 						priority
@@ -582,6 +271,9 @@ export default function Home() {
 						{SHOPS.map((shop) => {
 							if (!shop.polygon) return null;
 
+							const isFiltered = filteredShops.some(filteredShop => filteredShop.id === shop.id);
+							const isHighlighted = highlightedShopId === shop.id;
+
 							// Calculate center and bounds of the polygon
 							const minX = Math.min(...shop.polygon.map((p) => p.x));
 							const maxX = Math.max(...shop.polygon.map((p) => p.x));
@@ -597,16 +289,23 @@ export default function Home() {
 											?.map((p: { x: number; y: number }) => `${p.x},${p.y}`)
 											.join(' ')}
 										fill={
+											!isFiltered ? 'rgba(156,163,175,0.3)' : // gray for filtered out
 											shop.status === 'rented'
 												? shop.rentStatus === 'paid'
 													? 'rgba(34,197,94,0.5)' // green
 													: 'rgba(185,28,28,0.6)' // darker red
 												: 'rgba(234,179,8,0.6)' // darker yellow
 										}
-										stroke="black"
-										strokeWidth="1"
-										onClick={() => handleShopClick(shop)}
-										style={{ cursor: 'pointer' }}
+										stroke={isHighlighted ? '#3B82F6' : 'black'}
+										strokeWidth={isHighlighted ? '3' : '1'}
+										onClick={() => isFiltered && handleShopClick(shop)}
+										onMouseEnter={() => handleShopHover(shop.id)}
+										onMouseLeave={() => handleShopHover(null)}
+										style={{ 
+											cursor: isFiltered ? 'pointer' : 'not-allowed',
+											opacity: isFiltered ? 1 : 0.3,
+											transition: 'all 0.2s ease'
+										}}
 									/>
 									<text
 										x={centerX}
@@ -624,6 +323,7 @@ export default function Home() {
 											filter: 'drop-shadow(0 0 2px #000)',
 											WebkitTextStroke: '0.5px black',
 											paintOrder: 'stroke fill',
+											opacity: isFiltered ? 1 : 0.5
 										}}
 									>
 										{shop.name.split(' ').map((word, i, arr) => (
@@ -665,6 +365,61 @@ export default function Home() {
 						<span className="text-black">Vacant</span>
 					</div>
 				</div>
+
+				{/* Filtered Shops List */}
+				{filteredShops.length > 0 && (
+					<div className="mt-8 bg-white rounded-lg shadow-md p-6">
+						<h2 className="text-xl font-semibold text-gray-800 mb-4">
+							{searchTerm || selectedCategory !== 'all' || selectedStatus !== 'all' 
+								? 'Filtered Shops' 
+								: 'All Shops'}
+						</h2>
+						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+							{filteredShops.map((shop) => (
+								<div
+									key={shop.id}
+									className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer hover:border-blue-300"
+									onClick={() => handleShopClick(shop)}
+									onMouseEnter={() => handleShopHover(shop.id)}
+									onMouseLeave={() => handleShopHover(null)}
+								>
+									<div className="flex justify-between items-start mb-2">
+										<h3 className="font-semibold text-gray-800">{shop.name}</h3>
+										<span className={`px-2 py-1 text-xs rounded-full ${getCategoryColor(shop.category)}`}>
+											{shop.category}
+										</span>
+									</div>
+									<div className="text-sm text-gray-600 space-y-1">
+										<div className="flex justify-between">
+											<span>Size:</span>
+											<span>{shop.size}</span>
+										</div>
+										<div className="flex justify-between">
+											<span>Status:</span>
+											<span className={`font-medium ${
+												shop.status === 'rented' ? 'text-green-600' : 'text-yellow-600'
+											}`}>
+												{shop.status.charAt(0).toUpperCase() + shop.status.slice(1)}
+											</span>
+										</div>
+										{shop.contact?.phone && (
+											<div className="flex justify-between">
+												<span>Phone:</span>
+												<span className="text-xs">{shop.contact.phone}</span>
+											</div>
+										)}
+										{shop.hours && (
+											<div className="flex justify-between">
+												<span>Hours:</span>
+												<span className="text-xs">{shop.hours.opening} - {shop.hours.closing}</span>
+											</div>
+										)}
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				)}
 			</div>
 
 			{isModalOpen && selectedShop && (

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "name": "Ground Floor",
+    "image": "/1st-Floor.png",
+    "description": "Ground floor shops and services"
+  },
+  {
+    "id": "2", 
+    "name": "First Floor",
+    "image": "/2nd-Floor.png",
+    "description": "First floor retail spaces"
+  },
+  {
+    "id": "3",
+    "name": "Second Floor", 
+    "image": "/3rd-Floor.png",
+    "description": "Second floor entertainment and food court"
+  }
+]

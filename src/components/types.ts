@@ -16,4 +16,26 @@ export interface Shop {
     height: number;
   };
   polygon?: PolygonPoint[];
+  // Enhanced information
+  category: 'clothing' | 'footwear' | 'electronics' | 'food' | 'services' | 'entertainment' | 'other';
+  contact?: {
+    phone?: string;
+    email?: string;
+    website?: string;
+  };
+  hours?: {
+    opening: string;
+    closing: string;
+    days: string;
+  };
+  description?: string;
+  images?: string[];
+  floorId?: string;
+}
+
+export interface Floor {
+  id: string;
+  name: string;
+  image: string;
+  description: string;
 }
