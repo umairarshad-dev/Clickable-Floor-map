@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import ShopModal from '@/components/ShopModal';
 import { Shop, Floor } from '../components/types';
-import { Building2, Users, DollarSign, AlertCircle, MapPin, Search, Filter, X, Layers } from 'lucide-react';
+import { Building2, DollarSign, AlertCircle, MapPin, Search, X, Layers } from 'lucide-react';
 import shopsData from '../data/shops.json';
 import floorsData from '../data/floors.json';
 
